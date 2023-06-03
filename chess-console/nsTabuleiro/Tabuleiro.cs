@@ -82,9 +82,6 @@ namespace chess_console.nsTabuleiro
 
             return p;
         }
-        // Peca retirarPeca
-        // criar partidaxadrez
-        // movimentarpeca
-        // ColocarPecas
+
     }
 }
