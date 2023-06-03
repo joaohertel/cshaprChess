@@ -11,21 +11,24 @@ namespace chess_console
 
             try
             {
-                Tabuleiro tabuleiro = new Tabuleiro(8, 8);
-                Peca rei = new Rei(Cor.Preta, tabuleiro);
-                Peca torre1 = new Torre(Cor.Preta, tabuleiro);
-                Peca torre2 = new Torre(Cor.Preta, tabuleiro);
+                PartidaDeXadrez partida = new PartidaDeXadrez();
+
+                while (!partida.Terminada)
+                {
+                    Console.Clear();
+                    Tela.ImprimirTabuleiro(partida.Tab);
+                    Console.WriteLine();
 
 
-                tabuleiro.AdicionarPeca(rei, new Posicao(3, 3));
-                tabuleiro.AdicionarPeca(torre1, new Posicao(2, 2));
-                tabuleiro.AdicionarPeca(torre2, new Posicao(1, 0));
+                    Console.Write("Posicao Inicial:");
+                    Posicao pInicial = Tela.LerPosicaoXadrez();
 
+                    Console.Write("Posicao Final:");
+                    Posicao pFinal = Tela.LerPosicaoXadrez();
 
-                Peca reib = new Rei(Cor.Branca, tabuleiro);
-                tabuleiro.AdicionarPeca(reib, new Posicao(7, 7));
+                    partida.ExecutarJogada(pInicial, pFinal);
+                }
 
-                Tela.ImprimirTabuleiro(tabuleiro);
 
             }
             catch (TabuleiroException e)

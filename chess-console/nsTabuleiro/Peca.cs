@@ -20,5 +20,9 @@
 
         // 4) custom properties
         // 5) other methods
+        public void IncrementarQtdMovimentos()
+        {
+            QtdMovimentos++;
+        }
     }
 }

@@ -71,6 +71,20 @@ namespace chess_console.nsTabuleiro
             }
             return false;
         }
-        // nao permitir colocar peca onde ja existe
+
+        public Peca RemoverPeca(int posx, int posy)
+        {
+            // recuperar peca
+            Peca p = Pecas[posx, posy];
+
+            // set tabulerio.pos = null
+            Pecas[posx, posy] = null;
+
+            return p;
+        }
+        // Peca retirarPeca
+        // criar partidaxadrez
+        // movimentarpeca
+        // ColocarPecas
     }
 }

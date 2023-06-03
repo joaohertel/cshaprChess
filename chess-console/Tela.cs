@@ -8,6 +8,7 @@ namespace chess_console
         {
             for (int i = 0; i < tab.Linhas; i++)
             {
+                Console.Write((8 - i) + " ");
                 for (int j = 0; j < tab.Colunas; j++)
                 {
                     Peca? p = tab.GetPeca(i, j);
@@ -25,6 +26,7 @@ namespace chess_console
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine("  a b c d e f g h");
         }
         // void ImprimirPeca
         public static void ImprimirPeca(Peca peca)
@@ -39,6 +41,14 @@ namespace chess_console
             {
                 Console.Write(peca);
             }
+        }
+        public static Posicao LerPosicaoXadrez()
+        {
+            string entrada = Console.ReadLine();
+            char coluna = entrada[0];
+            int linha = int.Parse(entrada[1] + ""); // "" para forcar cast para string
+
+            return new PosicaoXadrez(linha, coluna).ToPos();
         }
     }
 }
