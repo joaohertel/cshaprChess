@@ -14,7 +14,8 @@ namespace chess_console
 
                     if (p != null)
                     {
-                        Console.Write(p);
+                        //Console.Write(p);
+                        ImprimirPeca(p);  
                     }
                     else
                     {
@@ -23,6 +24,20 @@ namespace chess_console
                     Console.Write(' ');
                 }
                 Console.WriteLine();
+            }
+        }
+        // void ImprimirPeca
+        public static void ImprimirPeca(Peca peca)
+        {
+            if(peca.Cor == Cor.Preta)
+            {
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write(peca);
+                Console.ForegroundColor = aux;
+            }else
+            {
+                Console.Write(peca);
             }
         }
     }
