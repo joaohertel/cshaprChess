@@ -1,6 +1,6 @@
 ﻿namespace chess_console.nsTabuleiro
 {
-    internal class Peca
+    internal abstract class Peca
     {
         // 1) private propertiets
         // 2) auto properties
@@ -24,6 +24,19 @@
         {
             QtdMovimentos++;
         }
+
+        public bool PodeMover(Posicao pos)
+        {
+            Peca peca = Tabuleiro.GetPeca(pos);
+            // calcular se esta vazia ou se tem peca adversaria
+            if(peca == null || peca.Cor != Cor)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public abstract bool[,] MovimentosPossiveis();  
         
     }
 }

@@ -14,7 +14,11 @@
             Coluna = coluna;
         }
 
-
+        public void DefinirPosicao(int linha, int coluna)
+        {
+            Linha = linha;
+            Coluna = coluna;
+        }
 
         // 4) custom properties
         // 5) other methods
