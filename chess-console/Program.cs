@@ -16,23 +16,41 @@ namespace chess_console
 
                 while (!partida.Terminada)
                 {
-                    Console.Clear();
-                    Tela.ImprimirTabuleiro(partida.Tab);
-                    Console.WriteLine();
+                    try
+                    {
+                        Console.Clear();
+                        Tela.ImprimirTabuleiro(partida.Tab);
+                        Console.WriteLine();
+                        Console.WriteLine($"Turno: {partida.Turno}");
+                        Console.WriteLine();
+                        Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
+                        Console.WriteLine();
+                        Console.Write("Posicao Inicial:");
+                        Posicao pInicial = Tela.LerPosicaoXadrez();
+
+                        partida.ValidaJogada( pInicial );
 
 
-                    Console.Write("Posicao Inicial:");
-                    Posicao pInicial = Tela.LerPosicaoXadrez();
+                        bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
 
-                    bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
+                        Console.Clear();
+                        Tela.ImprimirTabuleiro(partida.Tab, movimentosPossiveis);
+                        Console.WriteLine($"Turno: {partida.Turno}");
+                        Console.WriteLine();
+                        Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
+                        Console.WriteLine();
+                        Console.Write("Posicao Final:");
+                        Posicao pFinal = Tela.LerPosicaoXadrez();
 
-                    Console.Clear();
-                    Tela.ImprimirTabuleiro(partida.Tab, movimentosPossiveis);
 
-                    Console.Write("Posicao Final:");
-                    Posicao pFinal = Tela.LerPosicaoXadrez();
 
-                    partida.ExecutarJogada(pInicial, pFinal);
+                        partida.ExecutarJogada(pInicial, pFinal);
+                    }
+                    catch (Exception ex) 
+                    {
+                        Console.WriteLine(ex.Message);
+                        Console.ReadLine();
+                    }
                 }
 
 

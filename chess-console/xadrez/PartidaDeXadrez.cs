@@ -6,9 +6,9 @@ namespace chess_console.xadrez
     {
         // 1) private properties
         // 2) auto properties
-        public int Turno { get; set; }
+        public int Turno { get; private set; }
         public Tabuleiro Tab { get; set; }
-        private Cor JogadorAtual { get; set; }
+        public Cor JogadorAtual { get; private set; }
         public bool Terminada { get; private set; }
 
         // 3) constructors
@@ -24,6 +24,11 @@ namespace chess_console.xadrez
         private void ColocarPecas()
         {
             Tab.AdicionarPeca(new Rei(Cor.Branca, Tab),new PosicaoXadrez(1,'d').ToPos());
+            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'d').ToPos());
+            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'e').ToPos());
+            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'e').ToPos());
+            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'c').ToPos());
+            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'c').ToPos());
             Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'h').ToPos());
             Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'a').ToPos());
             
@@ -36,22 +41,61 @@ namespace chess_console.xadrez
             //ExecutarJogada(new PosicaoXadrez(1, 'a').ToPos(), new PosicaoXadrez(1, 'h').ToPos());
         }
 
+        public void ValidaJogada(Posicao posInicial)
+        {
+            Peca p = Tab.GetPeca(posInicial);
+            if (p == null)
+            {
+                throw new TabuleiroException("Nenhuma peca selecionada ");
+            }
+            if(p.Cor != JogadorAtual)
+            {
+                throw new TabuleiroException("A Peca escolhida nao e sua ");
+            }
+            if (!MovimentosPossiveis(p))
+            {
+                throw new TabuleiroException("Nenhum movimento possivel para a peca ");
+            }
+        }
+
+        private bool MovimentosPossiveis(Peca p)
+        {
+            foreach(bool posPossivel in p.MovimentosPossiveis())
+            {
+                if (posPossivel)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void ExecutarJogada(Posicao posInicial, Posicao posFinal)
+        {
+
+            MovimentarPeca(posInicial, posFinal);
+
+            // Passa o turno para o outro jogador
+            JogadorAtual = JogadorAtual == Cor.Preta ? Cor.Branca : Cor.Preta;
+
+            // aumenta o turno
+            Turno++;
+        }
+
+        // metodo de executar jogada
+        public void MovimentarPeca(Posicao posInicial, Posicao posFinal)
         {
             Peca pecaJogada = Tab.RemoverPeca(posInicial.Linha, posInicial.Coluna);
 
             pecaJogada.IncrementarQtdMovimentos();
-            
-            
+
+
             Peca pecaCapturada = Tab.RemoverPeca(posFinal.Linha, posFinal.Coluna);
 
             //Console.WriteLine($"Peca capturada = {pecaCapturada}");
 
             Tab.AdicionarPeca(pecaJogada, posFinal);
 
-            JogadorAtual = JogadorAtual == Cor.Preta ? Cor.Branca: Cor.Preta;
         }
-        // metodo de executar jogada
-
     }
 }
