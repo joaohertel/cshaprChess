@@ -45,9 +45,9 @@ namespace chess_console.nsTabuleiro
         public bool TestePosicaoValida(Posicao pos)
         {
             if(pos.Linha < 0
-                || pos.Linha > Linhas 
+                || pos.Linha > Linhas -1
                 || pos.Coluna < 0
-                || pos.Coluna > Colunas)
+                || pos.Coluna > Colunas -1 )
             {
                 return false;
             }

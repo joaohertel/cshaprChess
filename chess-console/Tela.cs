@@ -13,15 +13,41 @@ namespace chess_console
                 {
                     Peca? p = tab.GetPeca(i, j);
 
-                    if (p != null)
+                    ImprimirPeca(p);
+                    Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+        public static void ImprimirTabuleiro(Tabuleiro tab, bool[,] movimentosPossieis)
+        {
+            for (int i = 0; i < tab.Linhas; i++)
+            {
+                Console.Write((8 - i) + " ");
+                for (int j = 0; j < tab.Colunas; j++)
+                {
+
+                    ConsoleColor originalColor = Console.BackgroundColor;
+                    ConsoleColor shadedColor = ConsoleColor.DarkGray;
+
+                    if (movimentosPossieis[i, j])
                     {
-                        //Console.Write(p);
-                        ImprimirPeca(p);  
+                        Console.BackgroundColor = shadedColor;
                     }
                     else
                     {
-                        Console.Write("_");
+                        Console.BackgroundColor = originalColor;
                     }
+
+
+                    Peca? p = tab.GetPeca(i, j);
+
+                    ImprimirPeca(p);
+
+
+                    Console.BackgroundColor = originalColor;
+
                     Console.Write(' ');
                 }
                 Console.WriteLine();
@@ -31,13 +57,19 @@ namespace chess_console
         // void ImprimirPeca
         public static void ImprimirPeca(Peca peca)
         {
-            if(peca.Cor == Cor.Preta)
+
+            if (peca == null)
+            {
+                Console.Write("_");
+            }
+            else if (peca.Cor == Cor.Preta)
             {
                 ConsoleColor aux = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write(peca);
                 Console.ForegroundColor = aux;
-            }else
+            }
+            else
             {
                 Console.Write(peca);
             }

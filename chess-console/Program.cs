@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.SymbolStore;
 using chess_console.nsTabuleiro;
 using chess_console.xadrez;
 
@@ -22,6 +23,11 @@ namespace chess_console
 
                     Console.Write("Posicao Inicial:");
                     Posicao pInicial = Tela.LerPosicaoXadrez();
+
+                    bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
+
+                    Console.Clear();
+                    Tela.ImprimirTabuleiro(partida.Tab, movimentosPossiveis);
 
                     Console.Write("Posicao Final:");
                     Posicao pFinal = Tela.LerPosicaoXadrez();
