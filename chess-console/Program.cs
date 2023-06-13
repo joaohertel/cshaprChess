@@ -42,6 +42,7 @@ namespace chess_console
                         Console.Write("Posicao Final:");
                         Posicao pFinal = Tela.LerPosicaoXadrez();
 
+                        partida.ValidarPosicaoDeDestino(pInicial, pFinal);
 
 
                         partida.ExecutarJogada(pInicial, pFinal);

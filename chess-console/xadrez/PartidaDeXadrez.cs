@@ -97,5 +97,26 @@ namespace chess_console.xadrez
             Tab.AdicionarPeca(pecaJogada, posFinal);
 
         }
+
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            if (!Tab.GetPeca(origem).PodeMoverPara(destino))
+            {
+                throw new TabuleiroException("Movimentacao Invalida!");
+            }
+        }
     }
 }
+/*
+ peca
+public bool podeMoverPara(Posicao pos) 
+
+partidaxadrez
+
+public void validarPosicaoDeDestine(Posicao origem, Posicao destino)
+throw new tabuleiro exception
+
+program.cs
+implementando restricoes de movimento
+
+ */

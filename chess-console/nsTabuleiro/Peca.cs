@@ -36,6 +36,15 @@
             return false;
         }
 
+        public bool PodeMoverPara(Posicao pos)
+        {
+            if (!MovimentosPossiveis()[pos.Linha, pos.Coluna])
+            {
+                return false;
+            }
+            return true;
+        }
+
         public abstract bool[,] MovimentosPossiveis();  
         
     }
