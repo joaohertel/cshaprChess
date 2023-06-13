@@ -63,6 +63,4 @@ namespace chess_console
 
         }
     }
-    // POsicaoXadrez
-    // Posicao ToPos
 }

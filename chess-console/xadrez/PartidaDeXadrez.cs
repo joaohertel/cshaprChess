@@ -1,10 +1,13 @@
-﻿using chess_console.nsTabuleiro;
+﻿using System.Collections.Generic;
+using chess_console.nsTabuleiro;
 
 namespace chess_console.xadrez
 {
     internal class PartidaDeXadrez
     {
         // 1) private properties
+        private HashSet<Peca> Pecas { get; set; }
+        private HashSet<Peca> Capturadas { get; set; }
         // 2) auto properties
         public int Turno { get; private set; }
         public Tabuleiro Tab { get; set; }
@@ -18,27 +21,33 @@ namespace chess_console.xadrez
             JogadorAtual = Cor.Branca;
             Turno = 1;
             ColocarPecas();
+            Pecas = new HashSet<Peca>();
+            Capturadas= new HashSet<Peca>();
+
         }
         // 4) custom properties
         // 5) other methods
         private void ColocarPecas()
         {
-            Tab.AdicionarPeca(new Rei(Cor.Branca, Tab),new PosicaoXadrez(1,'d').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'d').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'e').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'e').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'c').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(2,'c').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'h').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Branca, Tab),new PosicaoXadrez(1,'a').ToPos());
+            ColocarNovaPeca('d',1, new Rei(Cor.Branca, Tab));
+            ColocarNovaPeca('d',2, new Torre(Cor.Branca,Tab));
+            ColocarNovaPeca('e',1, new Torre(Cor.Branca,Tab));
+            ColocarNovaPeca('e',2, new Torre(Cor.Branca,Tab));
+            ColocarNovaPeca('c',1, new Torre(Cor.Branca,Tab));
+            ColocarNovaPeca('c',2, new Torre(Cor.Branca,Tab));
             
+            ColocarNovaPeca('d',8,new Rei(Cor.Preta, Tab));
+            ColocarNovaPeca('d',7,new Torre(Cor.Preta, Tab));
+            ColocarNovaPeca('e',7, new Torre(Cor.Preta, Tab));
+            ColocarNovaPeca('c',7, new Torre(Cor.Preta, Tab));
+            ColocarNovaPeca('c',8, new Torre(Cor.Preta, Tab));
+            ColocarNovaPeca('e',8, new Torre(Cor.Preta, Tab));
             
-            Tab.AdicionarPeca(new Rei(Cor.Preta, Tab),new PosicaoXadrez(8,'d').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Preta, Tab),new PosicaoXadrez(8,'a').ToPos());
-            Tab.AdicionarPeca(new Torre(Cor.Preta, Tab),new PosicaoXadrez(8,'h').ToPos());
-            
-            
-            //ExecutarJogada(new PosicaoXadrez(1, 'a').ToPos(), new PosicaoXadrez(1, 'h').ToPos());
+        }
+
+        public void ColocarNovaPeca(char coluna, int linha, Peca peca)
+        {
+            Tab.AdicionarPeca(peca, new PosicaoXadrez(linha,coluna).ToPos());
         }
 
         public void ValidaJogada(Posicao posInicial)
@@ -92,10 +101,43 @@ namespace chess_console.xadrez
 
             Peca pecaCapturada = Tab.RemoverPeca(posFinal.Linha, posFinal.Coluna);
 
-            //Console.WriteLine($"Peca capturada = {pecaCapturada}");
+            if(pecaCapturada != null)
+            {
+                Capturadas.Add(pecaCapturada);
+            }
 
             Tab.AdicionarPeca(pecaJogada, posFinal);
 
+        }
+
+        public HashSet<Peca> PecasCapturadas(Cor cor)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+
+            foreach(Peca p in Capturadas)
+            {
+                if(p.Cor == cor)
+                {
+                    aux.Add(p);
+                }
+            }
+            return aux;
+        }
+        
+        
+        public HashSet<Peca> PecasEmJogo(Cor cor)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+
+            foreach(Peca p in Pecas)
+            {
+                if(p.Cor == cor)
+                {
+                    aux.Add(p);
+                }
+            }
+            aux.ExceptWith(PecasCapturadas(cor));
+            return aux;
         }
 
         public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino)
@@ -107,16 +149,3 @@ namespace chess_console.xadrez
         }
     }
 }
-/*
- peca
-public bool podeMoverPara(Posicao pos) 
-
-partidaxadrez
-
-public void validarPosicaoDeDestine(Posicao origem, Posicao destino)
-throw new tabuleiro exception
-
-program.cs
-implementando restricoes de movimento
-
- */
