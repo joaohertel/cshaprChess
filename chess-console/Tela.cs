@@ -1,9 +1,44 @@
 ﻿using chess_console.nsTabuleiro;
+using chess_console.xadrez;
 
 namespace chess_console
 {
     internal class Tela
     {
+        public static void ImprimirPartida(PartidaDeXadrez partida)
+        {
+            Tela.ImprimirTabuleiro(partida.Tab);
+            Console.WriteLine();
+            ImprimirPecasCapturadas(Cor.Branca, partida);
+            Console.WriteLine();
+            ImprimirPecasCapturadas(Cor.Preta, partida);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"Turno: {partida.Turno}");
+            Console.WriteLine();
+            Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
+            Console.WriteLine();
+
+        }
+
+        public static void ImprimirPecasCapturadas(Cor cor, PartidaDeXadrez partida)
+        {
+            ConsoleColor consoleColor = Console.ForegroundColor;
+            if(cor == Cor.Preta)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+
+            Console.Write($"{cor}: [");
+            foreach(Peca p in partida.PecasCapturadas(cor))
+            {
+                Console.Write($"{p} ");
+            }
+            Console.Write("]");
+
+            Console.ForegroundColor = consoleColor;
+        }
+
         public static void ImprimirTabuleiro(Tabuleiro tab)
         {
             for (int i = 0; i < tab.Linhas; i++)

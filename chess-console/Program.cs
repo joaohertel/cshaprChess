@@ -19,12 +19,8 @@ namespace chess_console
                     try
                     {
                         Console.Clear();
-                        Tela.ImprimirTabuleiro(partida.Tab);
-                        Console.WriteLine();
-                        Console.WriteLine($"Turno: {partida.Turno}");
-                        Console.WriteLine();
-                        Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
-                        Console.WriteLine();
+                        Tela.ImprimirPartida(partida);
+                        
                         Console.Write("Posicao Inicial:");
                         Posicao pInicial = Tela.LerPosicaoXadrez();
 
@@ -64,3 +60,10 @@ namespace chess_console
         }
     }
 }
+// program
+    // 
+// Tela
+    // public static void ImprimirPartida(PartidaDeXadrez partida)
+    // imprimir partida
+    // public static void ImprimirPecasCapturadas(PartidaDeXadrez partida)
+    // public static void ImprimirConjunto(HashSet<Peca> conjunto)
