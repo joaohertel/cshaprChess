@@ -14,15 +14,18 @@ namespace chess_console.xadrez
         public Cor JogadorAtual { get; private set; }
         public bool Terminada { get; private set; }
 
+        public bool Xeque { get; private set; }
+
         // 3) constructors
         public PartidaDeXadrez() 
         {
             Tab = new Tabuleiro(8, 8);
             JogadorAtual = Cor.Branca;
             Turno = 1;
-            ColocarPecas();
             Pecas = new HashSet<Peca>();
             Capturadas= new HashSet<Peca>();
+            ColocarPecas();
+            Xeque = false;
 
         }
         // 4) custom properties
@@ -48,6 +51,7 @@ namespace chess_console.xadrez
         public void ColocarNovaPeca(char coluna, int linha, Peca peca)
         {
             Tab.AdicionarPeca(peca, new PosicaoXadrez(linha,coluna).ToPos());
+            Pecas.Add(peca);
         }
 
         public void ValidaJogada(Posicao posInicial)
@@ -82,17 +86,52 @@ namespace chess_console.xadrez
         public void ExecutarJogada(Posicao posInicial, Posicao posFinal)
         {
 
-            MovimentarPeca(posInicial, posFinal);
+            Peca? pecaCapturada = MovimentarPeca(posInicial, posFinal);
+
+            if (EstaEmXeque(JogadorAtual))
+            {
+                // desfazer jogada
+                DesfazerJogada(posInicial, posFinal, pecaCapturada);
+                // Exception
+                throw new TabuleiroException($"Voce nao pode se colocar em Xeque!");
+            }
+
+            if (EstaEmXeque(Adversaria(JogadorAtual)))
+            {
+                Xeque = true;
+            }
 
             // Passa o turno para o outro jogador
             JogadorAtual = JogadorAtual == Cor.Preta ? Cor.Branca : Cor.Preta;
 
             // aumenta o turno
+            IncrementaTurno();
+
+        }
+
+        private void DesfazerJogada(Posicao posInicial, Posicao posFinal, Peca? pecaCapturada)
+        {
+            MovimentarPeca(posFinal, posInicial);
+            
+            if (pecaCapturada != null)
+            {
+                Tab.AdicionarPeca(pecaCapturada, posFinal);
+                Capturadas.Remove(pecaCapturada);
+            }
+        }
+
+        private void IncrementaTurno()
+        {
             Turno++;
         }
 
+        private void DecrementaTurno()
+        {
+            Turno--;
+        }
+
         // metodo de executar jogada
-        public void MovimentarPeca(Posicao posInicial, Posicao posFinal)
+        public Peca? MovimentarPeca(Posicao posInicial, Posicao posFinal)
         {
             Peca pecaJogada = Tab.RemoverPeca(posInicial.Linha, posInicial.Coluna);
 
@@ -108,6 +147,7 @@ namespace chess_console.xadrez
 
             Tab.AdicionarPeca(pecaJogada, posFinal);
 
+            return pecaCapturada;
         }
 
         public HashSet<Peca> PecasCapturadas(Cor cor)
@@ -137,6 +177,7 @@ namespace chess_console.xadrez
                 }
             }
             aux.ExceptWith(PecasCapturadas(cor));
+
             return aux;
         }
 
@@ -146,6 +187,46 @@ namespace chess_console.xadrez
             {
                 throw new TabuleiroException("Movimentacao Invalida!");
             }
+        }
+
+        private Rei? GetRei(Cor cor)
+        {
+            foreach(Peca x in PecasEmJogo(cor))
+            {
+                if(x is Rei)
+                {
+                    return (Rei)x;
+                }
+            }
+            return null;
+        }
+
+        public bool EstaEmXeque(Cor cor)
+        {
+            Rei? r = GetRei(cor);
+            if(r == null)
+            {
+                throw new TabuleiroException($"Nao existe rei da cor {cor} na partida");
+            }
+
+            foreach(Peca p in PecasEmJogo(Adversaria(cor)))
+            {
+                if (p.MovimentosPossiveis()[r.Posicao.Linha, r.Posicao.Coluna])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Cor Adversaria(Cor cor)
+        {
+
+            if(cor == Cor.Branca)
+            {
+                return Cor.Preta;
+            }
+            return Cor.Branca;
         }
     }
 }

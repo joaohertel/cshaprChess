@@ -9,12 +9,18 @@ namespace chess_console
         {
             Tela.ImprimirTabuleiro(partida.Tab);
             Console.WriteLine();
+            Console.WriteLine("Peças Capturadas");
             ImprimirPecasCapturadas(Cor.Branca, partida);
             Console.WriteLine();
             ImprimirPecasCapturadas(Cor.Preta, partida);
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine($"Turno: {partida.Turno}");
+            Console.WriteLine();
+            if (partida.Xeque)
+            {
+                Console.WriteLine("XEQUE!");
+            }
             Console.WriteLine();
             Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
             Console.WriteLine();

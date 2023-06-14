@@ -60,10 +60,3 @@ namespace chess_console
         }
     }
 }
-// program
-    // 
-// Tela
-    // public static void ImprimirPartida(PartidaDeXadrez partida)
-    // imprimir partida
-    // public static void ImprimirPecasCapturadas(PartidaDeXadrez partida)
-    // public static void ImprimirConjunto(HashSet<Peca> conjunto)
