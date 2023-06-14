@@ -25,6 +25,10 @@
             QtdMovimentos++;
         }
 
+
+        /// <summary>
+        /// Calcula se a posição de destino esta vazia ou se possui uma peça adversária
+        /// </summary>
         public bool PodeMover(Posicao pos)
         {
             Peca peca = Tabuleiro.GetPeca(pos);
@@ -36,7 +40,22 @@
             return false;
         }
 
-        public bool PodeMoverPara(Posicao pos)
+
+        /// <summary>
+        /// Calcula se a posição de destino está dentro das limitações específicas da peça
+        /// <example>
+        /// <code>
+        /// Rei r = new Rei(...);
+        /// r.MovimentoPossivel(algumaPosicao); 
+        /// </code>
+        /// Neste caso somente retorna true se a posicao de destino estiver
+        /// dentro das limitações do Rei já consideradas as posições válidas
+        /// dentro do tabuleiro e com peças aliadas
+        /// </example>
+        /// </summary>
+        /// <param name="pos">Posição de Destino</param>
+        /// <returns>bool indicando se a movimentação é possível</returns>
+        public bool MovimentoPossivel(Posicao pos)
         {
             if (!MovimentosPossiveis()[pos.Linha, pos.Coluna])
             {
