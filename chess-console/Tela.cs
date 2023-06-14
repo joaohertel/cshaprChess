@@ -7,23 +7,33 @@ namespace chess_console
     {
         public static void ImprimirPartida(PartidaDeXadrez partida)
         {
+            Console.Clear();
             Tela.ImprimirTabuleiro(partida.Tab);
             Console.WriteLine();
-            Console.WriteLine("Peças Capturadas");
-            ImprimirPecasCapturadas(Cor.Branca, partida);
-            Console.WriteLine();
-            ImprimirPecasCapturadas(Cor.Preta, partida);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"Turno: {partida.Turno}");
-            Console.WriteLine();
-            if (partida.Xeque)
+            if (!partida.Terminada)
             {
-                Console.WriteLine("XEQUE!");
+                Console.WriteLine("Peças Capturadas");
+                ImprimirPecasCapturadas(Cor.Branca, partida);
+                Console.WriteLine();
+                ImprimirPecasCapturadas(Cor.Preta, partida);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"Turno: {partida.Turno}");
+                Console.WriteLine();
+                if (partida.Xeque)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
+                Console.WriteLine();
+                Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
+                Console.WriteLine();
             }
-            Console.WriteLine();
-            Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
-            Console.WriteLine();
+            else
+            {
+                Console.WriteLine("Xeque Mate!");
+                Console.WriteLine();
+                Console.WriteLine($"Vencedor: {partida.Vencedor}");
+            }
 
         }
 

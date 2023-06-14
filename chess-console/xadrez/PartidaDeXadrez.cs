@@ -13,6 +13,7 @@ namespace chess_console.xadrez
         public Tabuleiro Tab { get; set; }
         public Cor JogadorAtual { get; private set; }
         public bool Terminada { get; private set; }
+        public Cor Vencedor { get; private set; }
 
         public bool Xeque { get; private set; }
 
@@ -99,6 +100,16 @@ namespace chess_console.xadrez
             if (EstaEmXeque(Adversaria(JogadorAtual)))
             {
                 Xeque = true;
+            }
+            else
+            {
+                Xeque = false;
+            }
+
+            if (TesteXequemate(Adversaria(JogadorAtual)))
+            {
+                Terminada = true;
+                Vencedor = JogadorAtual;
             }
 
             // Passa o turno para o outro jogador
@@ -227,6 +238,46 @@ namespace chess_console.xadrez
                 return Cor.Preta;
             }
             return Cor.Branca;
+        }
+        public bool TesteXequemate(Cor cor)
+        {
+            if (!EstaEmXeque(cor))
+            {
+                return false;
+            }
+            // testar todas as movimentacoes possiveis de todas as pecas
+            // para conferir se e possivel remover Xeque
+            foreach(Peca p in PecasEmJogo(cor))
+            {
+                bool[,] mov = p.MovimentosPossiveis();
+                for(int i = 0; i < mov.GetLength(0); i++)
+                {
+                    for(int j = 0; j < mov.GetLength(1); j++)
+                    {
+                        if (mov[i, j])
+                        {
+                            Posicao posInicial = p.Posicao;
+                            Posicao posFinal = new Posicao(i, j);
+                            // executa jogada
+                            Peca? capturada = MovimentarPeca(posInicial, posFinal);
+                            // testa
+                            bool xeque = EstaEmXeque(cor);
+                            // desfaz jogada
+                            MovimentarPeca(posFinal, posInicial);
+                            if(capturada != null)
+                            {
+                                Tab.AdicionarPeca(capturada, posFinal);
+                            }
+
+                            if (!xeque)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
     }
 }

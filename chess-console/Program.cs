@@ -49,6 +49,7 @@ namespace chess_console
                         Console.ReadLine();
                     }
                 }
+                Tela.ImprimirPartida(partida);
 
 
             }
