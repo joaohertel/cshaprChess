@@ -122,8 +122,16 @@ namespace chess_console.xadrez
 
         private void DesfazerJogada(Posicao posInicial, Posicao posFinal, Peca? pecaCapturada)
         {
-            MovimentarPeca(posFinal, posInicial);
             
+            MovimentarPeca(posFinal, posInicial);
+
+            Peca p = Tab.GetPeca(posInicial);
+
+            // Reduzindo duas vezes,
+            // uma para a MovimentarPeca e outra para DesfazerJogada
+            p.DecrementarQtdMovimentos();
+            p.DecrementarQtdMovimentos();
+
             if (pecaCapturada != null)
             {
                 Tab.AdicionarPeca(pecaCapturada, posFinal);
@@ -263,11 +271,12 @@ namespace chess_console.xadrez
                             // testa
                             bool xeque = EstaEmXeque(cor);
                             // desfaz jogada
-                            MovimentarPeca(posFinal, posInicial);
-                            if(capturada != null)
-                            {
-                                Tab.AdicionarPeca(capturada, posFinal);
-                            }
+                            DesfazerJogada(posInicial, posFinal, capturada);
+                            //MovimentarPeca(posFinal, posInicial);
+                            //if(capturada != null)
+                            //{
+                            //    Tab.AdicionarPeca(capturada, posFinal);
+                            //}
 
                             if (!xeque)
                             {

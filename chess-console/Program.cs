@@ -26,6 +26,8 @@ namespace chess_console
 
                         partida.ValidaJogada( pInicial );
 
+                        Peca tmp = partida.Tab.GetPeca(pInicial);
+                        Console.WriteLine($"Qtd Movimentos da Peça = {tmp.QtdMovimentos}");
 
                         bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
 
@@ -35,6 +37,7 @@ namespace chess_console
                         Console.WriteLine();
                         Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
                         Console.WriteLine();
+                        Console.WriteLine($"Qtd Movimentos da Peça = {tmp.QtdMovimentos}");
                         Console.Write("Posicao Final:");
                         Posicao pFinal = Tela.LerPosicaoXadrez();
 
@@ -61,3 +64,9 @@ namespace chess_console
         }
     }
 }
+// Bispo
+// Cavalo
+// Dama
+// Peao
+    // branco somente para cima, Preto somente para baixo
+// Acrescentando as demais pecas
