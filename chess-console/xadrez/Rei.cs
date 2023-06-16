@@ -123,7 +123,8 @@ namespace chess_console.xadrez
             {
                 // conferindo se ha torre em coluna + 3
                 Posicao posicaoTorreParaRoqueGrande = new Posicao(Posicao.Linha, Posicao.Coluna - 4);
-                if (Tabuleiro.TestePosicaoValida(posicaoTorreParaRoqueGrande)){
+                if (Tabuleiro.TestePosicaoValida(posicaoTorreParaRoqueGrande))
+                {
                     Peca torre = Tabuleiro.GetPeca(Posicao.Linha, Posicao.Coluna - 4);
                     if (torre != null
                         && torre is Torre
@@ -140,9 +141,7 @@ namespace chess_console.xadrez
                             Movimentacoes[Posicao.Linha, Posicao.Coluna - 2] = true;
                         }
                     }
-
                 }
-
             }
 
 

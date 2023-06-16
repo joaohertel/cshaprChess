@@ -12,6 +12,7 @@ namespace chess_console
             Console.WriteLine();
             if (!partida.Terminada)
             {
+                Console.WriteLine($"pecaPassivelDeEnPassant = {partida.pecaPassivelDeEnPassant}");
                 Console.WriteLine("Peças Capturadas");
                 ImprimirPecasCapturadas(Cor.Branca, partida);
                 Console.WriteLine();

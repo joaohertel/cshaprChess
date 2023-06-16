@@ -9,8 +9,10 @@ namespace chess_console.xadrez
 {
     internal class Peao : Peca
     {
-        public Peao(Cor cor, Tabuleiro tabuleiro) : base(cor, tabuleiro)
+        private PartidaDeXadrez Partida;
+        public Peao(Cor cor, Tabuleiro tabuleiro,PartidaDeXadrez partida) : base(cor, tabuleiro)
         {
+            Partida = partida;
         }
         // 4) custom properties
         // 5) other methods
@@ -94,10 +96,34 @@ namespace chess_console.xadrez
                     movimentos[pos.Linha, pos.Coluna] = true;
                 }
             }
-            // Captura apenas na diagonal
-            // pode mover se nao existe peca ou se existe peca adversaria
-            // na diagonal
 
+            // #jogadaespecial en passant
+            // peao captura peao
+            // condicoes
+            // peao A posicionado a duas linhas do peao B
+            // peao A posicionado a 1 coluna de diferenca
+            // peao B com 0 movimentos
+            // peao B movimenta 2 casas no primeiro movimento
+            // peao A pode, apenas na jogada imediata, capturar
+            // peao B na diagonal
+            Peca? alvo = Partida.pecaPassivelDeEnPassant;
+            if (alvo != null && alvo.Cor != Cor)
+            {
+                if(
+                    Math.Abs(alvo.Posicao.Coluna - Posicao.Coluna) == 1
+                    && alvo.Posicao.Linha == Posicao.Linha)
+                {
+                    if(alvo.Cor == Cor.Branca)
+                    {
+                        // linha + 1, coluna = coluna do alvo
+                        movimentos[alvo.Posicao.Linha + 1,alvo.Posicao.Coluna] = true;
+                    }
+                    else
+                    {
+                        movimentos[alvo.Posicao.Linha - 1, alvo.Posicao.Coluna] = true;
+                    }
+                }
+            }
 
             return movimentos;
         }
