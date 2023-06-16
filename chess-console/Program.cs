@@ -28,7 +28,6 @@ namespace chess_console
 
                         Peca tmp = partida.Tab.GetPeca(pInicial);
                         Console.WriteLine($"Qtd Movimentos da Peça = {tmp.QtdMovimentos}");
-
                         bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
 
                         Console.Clear();

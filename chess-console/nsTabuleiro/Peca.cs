@@ -34,7 +34,7 @@
         /// <summary>
         /// Calcula se a posição de destino esta vazia ou se possui uma peça adversária
         /// </summary>
-        public bool PodeMover(Posicao pos)
+        public virtual bool PodeMover(Posicao pos)
         {
             Peca peca = Tabuleiro.GetPeca(pos);
             // calcular se esta vazia ou se tem peca adversaria
