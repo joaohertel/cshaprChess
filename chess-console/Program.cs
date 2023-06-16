@@ -63,9 +63,3 @@ namespace chess_console
         }
     }
 }
-// Bispo
-// Cavalo
-// Dama
-// Peao
-    // branco somente para cima, Preto somente para baixo
-// Acrescentando as demais pecas

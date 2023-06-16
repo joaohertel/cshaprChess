@@ -33,25 +33,25 @@ namespace chess_console.xadrez
         // 5) other methods
         private void ColocarPecas()
         {
-            ColocarNovaPeca('d',5, new Cavalo(Cor.Branca,Tab));
+            ColocarNovaPeca('g',7, new Torre(Cor.Preta,Tab));
 
             // primeira fila
             ColocarNovaPeca('a',1, new Torre(Cor.Branca,Tab));
-            ColocarNovaPeca('b',1, new Cavalo(Cor.Branca,Tab));
-            ColocarNovaPeca('c',1, new Bispo(Cor.Branca,Tab));
-            ColocarNovaPeca('d',1, new Dama(Cor.Branca, Tab));
-            ColocarNovaPeca('e',1, new Rei(Cor.Branca,Tab));
-            ColocarNovaPeca('f',1, new Bispo(Cor.Branca,Tab));
-            ColocarNovaPeca('g',1, new Cavalo(Cor.Branca,Tab));
+            //ColocarNovaPeca('b',1, new Cavalo(Cor.Branca,Tab));
+            //ColocarNovaPeca('c',1, new Bispo(Cor.Branca,Tab));
+            //ColocarNovaPeca('d',1, new Dama(Cor.Branca, Tab));
+            ColocarNovaPeca('e',1, new Rei(Cor.Branca,Tab, this));
+            //ColocarNovaPeca('f',1, new Bispo(Cor.Branca,Tab));
+            //ColocarNovaPeca('g',1, new Cavalo(Cor.Branca,Tab));
             ColocarNovaPeca('h',1, new Torre(Cor.Branca,Tab));
             // segunda fila
             ColocarNovaPeca('a',2, new Peao(Cor.Branca,Tab));
             ColocarNovaPeca('b',2, new Peao(Cor.Branca,Tab));
-            ColocarNovaPeca('c',2, new Peao(Cor.Branca,Tab));
+            ColocarNovaPeca('c', 2, new Peao(Cor.Branca, Tab));
             ColocarNovaPeca('d',2, new Peao(Cor.Branca, Tab));
             ColocarNovaPeca('e',2, new Peao(Cor.Branca,Tab));
             ColocarNovaPeca('f',2, new Peao(Cor.Branca,Tab));
-            ColocarNovaPeca('g',2, new Peao(Cor.Branca,Tab));
+            ColocarNovaPeca('g', 2, new Peao(Cor.Branca, Tab));
             ColocarNovaPeca('h',2, new Peao(Cor.Branca,Tab));
             
 
@@ -60,7 +60,7 @@ namespace chess_console.xadrez
             ColocarNovaPeca('e',7, new Torre(Cor.Preta, Tab));
             ColocarNovaPeca('c',7, new Torre(Cor.Preta, Tab));
             // segunda fila
-            ColocarNovaPeca('d',8,new Rei(Cor.Preta, Tab));
+            ColocarNovaPeca('d',8,new Rei(Cor.Preta, Tab, this));
             ColocarNovaPeca('c',8, new Torre(Cor.Preta, Tab));
             ColocarNovaPeca('e',8, new Torre(Cor.Preta, Tab));
             
@@ -103,13 +103,45 @@ namespace chess_console.xadrez
 
         public void ExecutarJogada(Posicao posInicial, Posicao posFinal)
         {
-
+            Peca pecaMovida = Tab.GetPeca(posInicial);
             Peca? pecaCapturada = MovimentarPeca(posInicial, posFinal);
+            bool roquePequeno = false, roqueGrande = false;
+
+            // #jogadaespecial Teste para Roque pequeno 
+            if(pecaMovida is Rei && (posFinal.Coluna - posInicial.Coluna) == 2)
+            {
+                // Mover torre tambem
+                Posicao posInicialTorre = new Posicao(posInicial.Linha, posInicial.Coluna + 3);
+                Posicao posFinalTorre = new Posicao(posInicial.Linha, posInicial.Coluna + 1);
+                MovimentarPeca(posInicialTorre, posFinalTorre);
+                roquePequeno = true;
+            }
+            // #jogadaespecial Teste para Roque GRANDE 
+            if(pecaMovida is Rei && (posFinal.Coluna - posInicial.Coluna) == -2)
+            {
+                // Mover torre tambem
+                Posicao posInicialTorre = new Posicao(posInicial.Linha, posInicial.Coluna - 4);
+                Posicao posFinalTorre = new Posicao(posInicial.Linha, posInicial.Coluna - 1);
+                MovimentarPeca(posInicialTorre, posFinalTorre);
+                roqueGrande = true;
+            }
 
             if (EstaEmXeque(JogadorAtual))
             {
                 // desfazer jogada
                 DesfazerJogada(posInicial, posFinal, pecaCapturada);
+                if (roquePequeno)
+                {
+                    Posicao posInicialTorre = new Posicao(posInicial.Linha, posInicial.Coluna + 3);
+                    Posicao posFinalTorre = new Posicao(posInicial.Linha, posInicial.Coluna + 1);
+                    DesfazerJogada(posInicialTorre, posFinalTorre,null);
+                }                
+                if (roqueGrande)
+                {
+                    Posicao posInicialTorre = new Posicao(posInicial.Linha, posInicial.Coluna - 4);
+                    Posicao posFinalTorre = new Posicao(posInicial.Linha, posInicial.Coluna - 1);
+                    DesfazerJogada(posInicialTorre, posFinalTorre,null);
+                }
                 // Exception
                 throw new TabuleiroException($"Voce nao pode se colocar em Xeque!");
             }
