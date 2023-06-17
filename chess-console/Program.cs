@@ -27,16 +27,15 @@ namespace chess_console
                         partida.ValidaJogada( pInicial );
 
                         Peca tmp = partida.Tab.GetPeca(pInicial);
-                        Console.WriteLine($"Qtd Movimentos da Peça = {tmp.QtdMovimentos}");
                         bool[,] movimentosPossiveis = partida.Tab.GetPeca(pInicial).MovimentosPossiveis();
 
                         Console.Clear();
                         Tela.ImprimirTabuleiro(partida.Tab, movimentosPossiveis);
+                        Console.WriteLine();
                         Console.WriteLine($"Turno: {partida.Turno}");
                         Console.WriteLine();
                         Console.WriteLine($"Aguardando a jogada: {partida.JogadorAtual}");
                         Console.WriteLine();
-                        Console.WriteLine($"Qtd Movimentos da Peça = {tmp.QtdMovimentos}");
                         Console.Write("Posicao Final:");
                         Posicao pFinal = Tela.LerPosicaoXadrez();
 

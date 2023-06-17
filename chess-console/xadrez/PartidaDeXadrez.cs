@@ -34,17 +34,14 @@ namespace chess_console.xadrez
         // 5) other methods
         private void ColocarPecas()
         {
-            ColocarNovaPeca('e', 4, new Peao(Cor.Preta, Tab, this));
-            ColocarNovaPeca('e', 1, new Dama(Cor.Branca, Tab));
-            ColocarNovaPeca('d', 1, new Rei(Cor.Branca, Tab, this));
 
 
             // primeira fila
             ColocarNovaPeca('a', 1, new Torre(Cor.Branca, Tab));
             ColocarNovaPeca('b', 1, new Cavalo(Cor.Branca, Tab));
             ColocarNovaPeca('c', 1, new Bispo(Cor.Branca, Tab));
-            //ColocarNovaPeca('d', 1, new Dama(Cor.Branca, Tab));
-            //ColocarNovaPeca('e', 1, new Rei(Cor.Branca, Tab, this));
+            ColocarNovaPeca('d', 1, new Dama(Cor.Branca, Tab));
+            ColocarNovaPeca('e', 1, new Rei(Cor.Branca, Tab, this));
             ColocarNovaPeca('f', 1, new Bispo(Cor.Branca, Tab));
             ColocarNovaPeca('g', 1, new Cavalo(Cor.Branca, Tab));
             ColocarNovaPeca('h', 1, new Torre(Cor.Branca, Tab));
@@ -53,7 +50,7 @@ namespace chess_console.xadrez
             ColocarNovaPeca('b', 2, new Peao(Cor.Branca, Tab, this));
             ColocarNovaPeca('c', 2, new Peao(Cor.Branca, Tab, this));
             ColocarNovaPeca('d', 2, new Peao(Cor.Branca, Tab, this));
-            //ColocarNovaPeca('e',2, new Peao(Cor.Branca,Tab,this));
+            ColocarNovaPeca('e', 2, new Peao(Cor.Branca, Tab, this));
             ColocarNovaPeca('f', 2, new Peao(Cor.Branca, Tab, this));
             ColocarNovaPeca('g', 2, new Peao(Cor.Branca, Tab, this));
             ColocarNovaPeca('h', 2, new Peao(Cor.Branca, Tab, this));
@@ -73,7 +70,7 @@ namespace chess_console.xadrez
             ColocarNovaPeca('b', 7, new Peao(Cor.Preta, Tab, this));
             ColocarNovaPeca('c', 7, new Peao(Cor.Preta, Tab, this));
             ColocarNovaPeca('d', 7, new Peao(Cor.Preta, Tab, this));
-            //ColocarNovaPeca('e', 7, new Peao(Cor.Preta, Tab, this));
+            ColocarNovaPeca('e', 7, new Peao(Cor.Preta, Tab, this));
             ColocarNovaPeca('f', 7, new Peao(Cor.Preta, Tab, this));
             ColocarNovaPeca('g', 7, new Peao(Cor.Preta, Tab, this));
             ColocarNovaPeca('h', 7, new Peao(Cor.Preta, Tab, this));
@@ -121,6 +118,7 @@ namespace chess_console.xadrez
             Peca? pecaCapturada = MovimentarPeca(posInicial, posFinal);
             bool roquePequeno = false, roqueGrande = false;
             bool enPassant = false;
+            bool promocao = false;
 
             // #jogadaespecial Teste para Roque pequeno 
             if (pecaMovida is Rei && (posFinal.Coluna - posInicial.Coluna) == 2)
@@ -155,6 +153,8 @@ namespace chess_console.xadrez
                     );
                 this.Capturadas.Add(pecaCapturada);
             }
+            
+
 
             if (EstaEmXeque(JogadorAtual))
             {
@@ -190,12 +190,31 @@ namespace chess_console.xadrez
                     Posicao posFinalTorre = new Posicao(posInicial.Linha, posInicial.Coluna - 1);
                     DesfazerJogada(posInicialTorre, posFinalTorre, null);
                 }
-                if (enPassant)
-                {
-                    //
-                }
+                
                 // Exception
                 throw new TabuleiroException($"Voce nao pode se colocar em Xeque!");
+            }
+
+            // #jogadaespecial Promocao
+            // peca automaticamente promovida a Dama
+            if (pecaMovida is Peao)
+            {
+                if (pecaMovida.Cor == Cor.Branca && posFinal.Linha == 0)
+                {
+                    // remover peao e adicionar dama
+                    Peca pecaPromovida = Tab.RemoverPeca(pecaMovida.Posicao.Linha, pecaMovida.Posicao.Coluna);
+                    Pecas.Remove(pecaPromovida);
+                    Peca novaPeca = new Dama(pecaPromovida.Cor, Tab);
+                    Tab.AdicionarPeca(novaPeca, posFinal);
+                }
+                else if (pecaMovida.Cor == Cor.Preta && posFinal.Linha == 7)
+                {
+                    Peca pecaPromovida = Tab.RemoverPeca(pecaMovida.Posicao.Linha, pecaMovida.Posicao.Coluna);
+                    Pecas.Remove(pecaPromovida);
+                    Peca novaPeca = new Dama(pecaPromovida.Cor, Tab);
+                    Tab.AdicionarPeca(novaPeca, posFinal);
+
+                }
             }
 
             if (EstaEmXeque(Adversaria(JogadorAtual)))

@@ -12,14 +12,12 @@ namespace chess_console
             Console.WriteLine();
             if (!partida.Terminada)
             {
-                Console.WriteLine($"pecaPassivelDeEnPassant = {partida.pecaPassivelDeEnPassant}");
+                Console.WriteLine($"Turno: {partida.Turno}");
                 Console.WriteLine("Peças Capturadas");
                 ImprimirPecasCapturadas(Cor.Branca, partida);
                 Console.WriteLine();
                 ImprimirPecasCapturadas(Cor.Preta, partida);
                 Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine($"Turno: {partida.Turno}");
                 Console.WriteLine();
                 if (partida.Xeque)
                 {
